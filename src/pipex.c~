@@ -1,0 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mugurel <muhammedtalhaugurel@gmai...>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/02 23:36:07 by mugurel           #+#    #+#             */
+/*   Updated: 2023/02/02 23:36:08 by mugurel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/pipex.h"
+#include "../lib/lib/libft.h"
+
+
+void	handle_error(char *str)
+{
+	ft_putstr_fd(str, 2);
+	exit(errno);
+}
+
+int	main(int ac, char **av)
+{
+	int	error;
+	
+	if (ac < 4)
+		handle_error("Usage => pipex file1 command1 command2 file2");
+	error = access(av[1], R_OK);
+	error = access(av[ac], R_OK);
+	if (error == -1)
+		handle_error(strerror(errno));
+}
