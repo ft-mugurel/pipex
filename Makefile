@@ -14,8 +14,8 @@ SRCS = ./src/pipex.c
 SRCBS = 
 NAME = pipex
 CC = gcc
-CFLAGS =  -g
-LIB = ./lib/lib/libft.a
+CFLAGS = -g
+LIB = ./lib/libft/libft.a
 RM = rm -rf
 LIBC = ar -rcs
 
