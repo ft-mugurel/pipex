@@ -10,7 +10,8 @@
 #                                                                              #
 #******************************************************************************#
 
-SRCS = ./src/pipex.c
+SRCS =	./src/pipex.c			\
+				./src/ft_execvp.c	
 SRCBS = 
 NAME = pipex
 CC = gcc

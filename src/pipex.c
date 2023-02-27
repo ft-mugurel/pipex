@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-#include "../lib/lib/libft.h"
+#include "../lib/libft/libft.h"
 
 
 void	handle_error(char *str)
@@ -20,13 +20,14 @@ void	handle_error(char *str)
 	exit(errno);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **ev)
 {
 	int	error;
 	int	pi[2];
 	int	pid1;
 	int	pid2;
 
+	find_path(ev);
 	if (ac < 4)
 		handle_error("Usage => pipex file1 command1 command2 file2");
 	error = pipe(pi);

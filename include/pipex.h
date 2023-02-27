@@ -21,4 +21,6 @@
 # include <errno.h>
 # include <sys/wait.h>
 
+char	*find_path(char **ev);
+
 #endif
