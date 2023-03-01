@@ -12,26 +12,28 @@
 
 SRCS =	./src/pipex.c			\
 				./src/ft_execvp.c	
-SRCBS = 
+OBJS = ${SRCS:.c=.o}
 NAME = pipex
 CC = gcc
 CFLAGS = -g
-LIB = ./lib/libft/libft.a
+LIBFT = ./lib/libft/libft.a
 RM = rm -rf
 LIBC = ar -rcs
 
 all: ${NAME}
 
-$(NAME): $(SRCS)
-	@gcc $(CFLAGS) $(LFLAGS) $(SRCS) $(LIB) -o $(NAME)
+$(NAME): $(SRCS) ${LIBFT}
+	@gcc $(CFLAGS) $(LFLAGS) $(SRCS) $(LIBFT) -o $(NAME)
 
-bonus : $(SRCBS) $(MLX) $(FT_PRINTF) $(GET_NEXT_LINE)
-	@gcc $(CFLAGS) $(LFLAGS) $(SRCBS) $(FT_PRINTF) $(GET_NEXT_LINE) -o $(NAME)
+$(LIBFT) :
+	@make -C ./lib/libft/
 
 clean:
+	@${RM} ${OBJS}
+	@make clean -C ./lib/libft/
 
 fclean: clean
-	@rm -rf $(NAME)
+	@${RM} ${NAME} ${LIBFT}
 
 re: fclean all
 

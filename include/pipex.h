@@ -17,10 +17,13 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <string.h>
 # include <errno.h>
 # include <sys/wait.h>
 
 char	*find_path(char **ev);
+char	*find_cmd_path(char **ev, char *command);
+void	handle_error(char *str);
 
 #endif
