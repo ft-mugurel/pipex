@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execvp.c                                           :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mugurel <muhammedtalhaugurel@gmai...>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,51 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
-#include "../lib/libft/libft.h"
+#ifndef PIPEX_H
+# define PIPEX_H
 
-char	*find_path(char **ev)
+# include <stdio.h>
+# include <stdint.h>
+# include <stdbool.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <string.h>
+# include <errno.h>
+# include <sys/wait.h>
+
+typedef struct t_list
 {
-	int32_t i;
+	int32_t	*pi;
+	int32_t	cmd_num;
+	int32_t	pi_num;
+	int32_t	pid;
+	int32_t	fd1;
+	int32_t	fd2;
+}			t_pipe;
 
-	i = 0;
-	while (ev[i])
-	{
-		if (ft_strncmp(ev[i], "PATH", 4) == 0)
-			return (ev[i] + 5);
-		i++;
-	}
-	return (NULL);
-}
+char	*find_path(char **ev);
+char	*find_cmd_path(char **ev, char *command);
+void	handle_error(char *str);
+void	mtu_fork(char *av, char **ev);
+void	creat_pipes(t_pipe *pip);
+void	close_pipes(t_pipe *pip);
 
-char	*find_cmd_path(char **ev, char *command)
-{
-	int32_t	i;
-	char		*pathvar;
- 	char		**paths;
- 	char		*cmd;
-	pathvar = find_path(ev);
- 	paths = ft_split(pathvar, ':'); 
-	i = 0;
- 	while (paths[i])
- 	{
-		pathvar = ft_strjoin(paths[i], "/");
-		cmd = ft_strjoin(pathvar, ft_split(command, ' ')[0]);
-		free(pathvar);
-		if (access(cmd, X_OK) == 0)
-		{
-			free(paths);
-			return (cmd);	
-		}
-		free(cmd);
-		i++;
- 	}
-	free(paths);
- 	return (NULL);
-}
-
-void	handle_error(char *str)
-{
-	ft_putstr_fd(str, 2);
-	exit(errno);
-}
+#endif

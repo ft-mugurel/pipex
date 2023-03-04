@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 #include "../lib/libft/libft.h"
 
 char	*find_path(char **ev)
@@ -63,39 +63,33 @@ char **cmd_args(char *av, char **ev)
 	return (args);
 }
 
-void	mtu_fork(char **av, char **ev, int32_t pi[2], int8_t pos)
+void	mtu_fork(char *av, char **ev)
 {
-	static int16_t cmd_id = 2;
-	
-	if (pos == 1)
+	execve(find_cmd_path(ev, av) , ft_split(av, ' '), ev);
+}
+
+void	creat_pipes(t_pipe *pip)
+{
+	int	i;
+
+	i = 0;
+	while (i < pip->pi_num)
 	{
-		dup2(pi[1], STDOUT_FILENO);
-		close(pi[0]);
-		close(pi[1]);
-		ft_putstr_fd(ft_atoi(cmd_id), 2);
-		cmd_id++;
-		execve(find_cmd_path(ev, av[cmd_id]) , ft_split(av[cmd_id], ' '), ev);
+		if (pipe(pip->pi + 2 * i) < 0)
+			return ; //we will be need to free this shits
+		i++;
 	}
-	else if (pos == 2)
+}
+
+void	close_pipes(t_pipe *pip)
+{
+	int	i;
+
+	i = 0;
+	while (i < (pip->pi_num * 2))
 	{
-		dup2(pi[0], STDIN_FILENO);
-		dup2(pi[1], STDOUT_FILENO);
-		close(pi[0]);
-		close(pi[1]);
-		ft_putstr_fd(ft_atoi(cmd_id), 2);
-		cmd_id++;
-		execve(find_cmd_path(ev, av[cmd_id]), ft_split(av[cmd_id], ' '), ev);
-	}
-	else
-	{
-		dup2(pi[0], STDIN_FILENO);
-		close(pi[1]);
-		close(pi[0]);
-		ft_putstr_fd(ft_split(av[cmd_id], ' ')[0], 1);
-		ft_putstr_fd(ft_split(av[cmd_id], ' ')[1], 1);
-		ft_putstr_fd(ft_atoi(cmd_id), 2);
-		cmd_id++;
-		execve(find_cmd_path(ev, av[cmd_id]), ft_split(av[cmd_id], ' '), ev);
+		close(pip->pi[i]);
+		i++;
 	}
 }
 
