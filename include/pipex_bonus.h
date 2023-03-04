@@ -30,13 +30,17 @@ typedef struct t_list
 	int32_t	pid;
 	int32_t	fd1;
 	int32_t	fd2;
+	int32_t	i;
+	int32_t	ac;
 }			t_pipe;
 
 char	*find_path(char **ev);
 char	*find_cmd_path(char **ev, char *command);
+void	cmd_pos(t_pipe *pip, char **av, char **ev);
 void	handle_error(char *str);
 void	mtu_fork(char *av, char **ev);
 void	creat_pipes(t_pipe *pip);
 void	close_pipes(t_pipe *pip);
+void	pipex_preparation(t_pipe *pip, int ac, char **av);
 
 #endif

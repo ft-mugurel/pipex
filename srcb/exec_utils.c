@@ -15,7 +15,7 @@
 
 char	*find_path(char **ev)
 {
-	int32_t i;
+	int32_t	i;
 
 	i = 0;
 	while (ev[i])
@@ -30,32 +30,33 @@ char	*find_path(char **ev)
 char	*find_cmd_path(char **ev, char *command)
 {
 	int32_t	i;
-	char		*pathvar;
- 	char		**paths;
- 	char		*cmd;
+	char	*pathvar;
+	char	**paths;
+	char	*cmd;
+
 	pathvar = find_path(ev);
- 	paths = ft_split(pathvar, ':'); 
+	paths = ft_split(pathvar, ':');
 	i = 0;
- 	while (paths[i])
- 	{
+	while (paths[i])
+	{
 		pathvar = ft_strjoin(paths[i], "/");
 		cmd = ft_strjoin(pathvar, ft_split(command, ' ')[0]);
 		free(pathvar);
 		if (access(cmd, X_OK) == 0)
 		{
 			free(paths);
-			return (cmd);	
+			return (cmd);
 		}
 		free(cmd);
 		i++;
- 	}
+	}
 	free(paths);
- 	return (NULL);
+	return (NULL);
 }
 
-char **cmd_args(char *av, char **ev)
+char	**cmd_args(char *av, char **ev)
 {
-	char **args;
+	char	**args;
 
 	args = ft_split(av, ' ');
 	free(args[0]);
@@ -65,5 +66,33 @@ char **cmd_args(char *av, char **ev)
 
 void	mtu_fork(char *av, char **ev)
 {
-	execve(find_cmd_path(ev, av) , ft_split(av, ' '), ev);//error
+	if (execve(find_cmd_path(ev, av), ft_split(av, ' '), ev) == -1)
+		handle_error(strerror(errno));
+}
+
+void	cmd_pos(t_pipe *pip, char **av, char **ev)
+{
+	if (pip->i == 2)
+	{
+		if (dup2(pip->pi[1], STDOUT_FILENO) == -1)
+			handle_error(strerror(errno));
+		close_pipes(pip);
+		mtu_fork(av[pip->i], ev);
+	}
+	else if (pip->i == pip->ac - 2)
+	{
+		if (dup2(pip->pi[(2 * (pip->i - 2)) - 2], STDIN_FILENO) == -1)
+			handle_error(strerror(errno));
+		close_pipes(pip);
+		mtu_fork(av[pip->i], ev);
+	}
+	else
+	{
+		if (dup2(pip->pi[(2 * (pip->i - 2)) - 2], STDIN_FILENO) == -1)
+			handle_error(strerror(errno));
+		if (dup2(pip->pi[(2 * (pip->i - 2)) + 1], STDOUT_FILENO) == -1)
+			handle_error(strerror(errno));
+		close_pipes(pip);
+		mtu_fork(av[pip->i], ev);
+	}
 }
