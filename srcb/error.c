@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execvp.c                                           :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mugurel <muhammedtalhaugurel@gmai...>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,30 +13,8 @@
 #include "../include/pipex_bonus.h"
 #include "../lib/libft/libft.h"
 
-void	creat_pipes(t_pipe *pip)
+void	handle_error(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (i < pip->pi_num)
-	{
-		if (pipe(pip->pi + 2 * i) == -1)
-			{
-				free(pip->pi);
-				handle_error(strerror(errno));
-			}
-		i++;
-	}
-}
-
-void	close_pipes(t_pipe *pip)
-{
-	int	i;
-
-	i = 0;
-	while (i < (pip->pi_num * 2))
-	{
-		close(pip->pi[i]);
-		i++;
-	}
+	ft_putstr_fd(str, 2);
+	exit(errno);
 }

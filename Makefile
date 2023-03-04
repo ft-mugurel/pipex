@@ -10,13 +10,13 @@
 #                                                                              #
 #******************************************************************************#
 
-SRCS =	./src/pipex.c			\
+SRCS =	./src/pipex.c				\
 				./src/pipex_utils.c	
-OBJS = ${SRCS:.c=.o}
 
-SRCS_B =	./srcb/pipex_bonus.c			\
-				./srcb/pipex_utils_bonus.c	
-OBJS_B = ${SRCS_B:.c=.o}
+SRCS_B =	./srcb/pipex_bonus.c				\
+					./srcb/pipex_utils_bonus.c	\
+					./srcb/error.c							\
+					./srcb/exec_utils.c	
 NAME = pipex
 CC = gcc
 CFLAGS = -g

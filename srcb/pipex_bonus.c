@@ -24,10 +24,10 @@ int	main(int ac, char **av, char **ev)
 
 	if (ac < 5)
 		handle_error("Usage => pipex file1 command1 command2 file2");
-	fd1 = open(av[1], O_RDONLY);
-	error = dup2(fd1, STDIN_FILENO);
-	fd2 = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	error = dup2(fd2, STDOUT_FILENO);
+	fd1 = open(av[1], O_RDONLY);//error
+	error = dup2(fd1, STDIN_FILENO);//error
+	fd2 = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);//error
+	error = dup2(fd2, STDOUT_FILENO);//error
 	if (error == -1 || fd1 == -1 || fd2 == -1)
 		handle_error(strerror(errno));
 	pip.cmd_num = ac - 3;
@@ -35,7 +35,7 @@ int	main(int ac, char **av, char **ev)
 	pip.pi = (int *)malloc(sizeof(int) * (pip.pi_num * 2));
 	if(!pip.pi)
 		handle_error("Allocation fail");
-	creat_pipes(&pip);
+	creat_pipes(&pip);//error
 	i = 2;
 	while (i < ac - 1)
 	{
@@ -46,22 +46,22 @@ int	main(int ac, char **av, char **ev)
 		{
 			if (i == 2)
 			{
-				dup2(pip.pi[1], STDOUT_FILENO);
-				close_pipes(&pip);
-				mtu_fork(av[i], ev);
+				dup2(pip.pi[1], STDOUT_FILENO);//error
+				close_pipes(&pip);//error
+				mtu_fork(av[i], ev);//error
 			}
 			else if (i == ac - 2)
 			{
-				dup2(pip.pi[(2 * (i - 2)) - 2], STDIN_FILENO);
-				close_pipes(&pip);
-				mtu_fork(av[i], ev);
+				dup2(pip.pi[(2 * (i - 2)) - 2], STDIN_FILENO);//error
+				close_pipes(&pip);//error
+				mtu_fork(av[i], ev);//error
 			}
 			else
 			{
-				dup2(pip.pi[(2 * (i - 2)) - 2], STDIN_FILENO);
-				dup2(pip.pi[(2 * (i - 2)) + 1], STDOUT_FILENO);
-				close_pipes(&pip);
-				mtu_fork(av[i], ev);
+				dup2(pip.pi[(2 * (i - 2)) - 2], STDIN_FILENO);//error
+				dup2(pip.pi[(2 * (i - 2)) + 1], STDOUT_FILENO);//error
+				close_pipes(&pip);//error
+				mtu_fork(av[i], ev);//error
 			}
 		}
 		close(pid);
