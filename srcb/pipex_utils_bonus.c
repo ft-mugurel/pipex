@@ -41,28 +41,12 @@ void	close_pipes(t_pipe *pip)
 	}
 }
 
-void	here_doc(char **av)
-{
-	while (true)
-	{
-		str = get_next_line(0);
-		ft_strncmp(str, av[2], 250);
-		free(str);
-	}
-}
-
 void	pipex_preparation(t_pipe *pip, int ac, char **av)
 {
-	int		error;
-	char	*str;
+	int	error;
 
-	if (ft_strncmp("here_doc", av[1], 8))
-		her_doc(av);
-	else
-	{
-		pip->fd1 = open(av[1], O_RDONLY);
-		error = dup2(pip->fd1, STDIN_FILENO);
-	}
+	pip->fd1 = open(av[1], O_RDONLY);
+	error = dup2(pip->fd1, STDIN_FILENO);
 	pip->fd2 = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	error = dup2(pip->fd2, STDOUT_FILENO);
 	if (error == -1 || pip->fd1 == -1 || pip->fd2 == -1)
