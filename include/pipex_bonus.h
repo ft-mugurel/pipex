@@ -42,5 +42,6 @@ void	mtu_fork(char *av, char **ev);
 void	creat_pipes(t_pipe *pip);
 void	close_pipes(t_pipe *pip);
 void	pipex_preparation(t_pipe *pip, int ac, char **av);
+int		here_doc_check(char **av);
 
 #endif

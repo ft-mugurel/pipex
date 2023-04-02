@@ -19,23 +19,30 @@ int	main(int ac, char **av, char **ev)
 
 	if (ac < 5)
 		handle_error("Usage => pipex file1 command1 command2 file2");
-	pipex_preparation(&pip, ac, av);
-	pip.ac = ac;
-	while (pip.i < ac - 1)
+	if (!here_doc_check(av))
 	{
-		pip.pid = fork();
-		if (pip.pid == -1)
-			handle_error(strerror(errno));
-		if (pip.pid == 0)
-		{
-			cmd_pos(&pip, av, ev);
-		}
-		close(pip.pid);
-		pip.i++;
+		//here_doc fonction
 	}
-	close_pipes(&pip);
-	close(pip.fd1);
-	close(pip.fd2);
-	waitpid(pip.pid, NULL, 0);
+	else
+	{
+		pipex_preparation(&pip, ac, av);
+		pip.ac = ac;
+		while (pip.i < ac - 1)
+		{
+			pip.pid = fork();
+			if (pip.pid == -1)
+				handle_error(strerror(errno));
+			if (pip.pid == 0)
+			{
+				cmd_pos(&pip, av, ev);
+			}
+			close(pip.pid);
+			pip.i++;
+		}
+		close_pipes(&pip);
+		close(pip.fd1);
+		close(pip.fd2);
+		waitpid(pip.pid, NULL, 0);
+	}
 	return (0);
 }

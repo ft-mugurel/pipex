@@ -59,3 +59,15 @@ void	pipex_preparation(t_pipe *pip, int ac, char **av)
 		handle_error("Allocation fail");
 	creat_pipes(pip);
 }
+
+int	here_doc_check(char **av)
+{
+	if (ft_strncmp(av[1], "here_doc", 8))
+		return (1);
+	else
+		return (0);
+}
+
+int	here_doc_check(char **av)
+{
+}
