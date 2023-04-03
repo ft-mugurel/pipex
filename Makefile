@@ -20,30 +20,38 @@ SRCS_B =	./srcb/pipex_bonus.c				\
 NAME = pipex
 CC = gcc
 CFLAGS = -g
+LFLAGS = -I./include/ -I./lib/gnl-lib/include/ -I./lib/libft/
 LIBFT = ./lib/libft/libft.a
+GET_NEXT_LINE = ./lib/gnl-lib/get_next_line.a
 RM = rm -rf
 LIBC = ar -rcs
 
 all: ${NAME}
 
-$(NAME): $(SRCS) ${LIBFT}
-	@gcc $(CFLAGS) $(LFLAGS) $(SRCS) $(LIBFT) -o $(NAME)
+$(NAME): $(SRCS) ${LIBFT} $(GET_NEXT_LINE)
+	@gcc $(CFLAGS) $(LFLAGS) $(SRCS) $(GET_NEXT_LINE) $(LIBFT) -o $(NAME)
 
-bonus:  $(SRCS_B) ${LIBFT}
-	@gcc $(CFLAGS) $(LFLAGS) $(SRCS_B) $(LIBFT) -o $(NAME)
+bonus:  $(SRCS_B) ${LIBFT} $(GET_NEXT_LINE)
+	@gcc $(CFLAGS) $(LFLAGS) $(SRCS_B) $(GET_NEXT_LINE) $(LIBFT) -o $(NAME)
 
 $(LIBFT) :
 	@make -C ./lib/libft/
+
+$(GET_NEXT_LINE):
+	@make -C ./lib/gnl-lib
 
 norm:
 		@norminette
 
 clean:
 	@${RM} ${OBJS}
-	@make clean -C ./lib/libft/
+	@make clean -C ./lib/gnl-lib
+	@make clean -C ./lib/libft
 
 fclean: clean
-	@${RM} ${NAME} ${LIBFT}
+	@rm -rf $(NAME)
+	@make fclean -C ./lib/gnl-lib
+	@make fclean -C ./lib/libft
 
 re: fclean all
 

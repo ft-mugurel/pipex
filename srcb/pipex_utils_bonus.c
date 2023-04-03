@@ -10,8 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex_bonus.h"
-#include "../lib/libft/libft.h"
+#include "pipex_bonus.h"
+#include "libft.h"
+#include "get_next_line.h"
+
+#define FILE_NAME_BUFFER 250
 
 void	creat_pipes(t_pipe *pip)
 {
@@ -68,6 +71,23 @@ int	here_doc_check(char **av)
 		return (0);
 }
 
-int	here_doc_check(char **av)
+void	here_doc(char **av)
 {
+	char	*line;
+	int		size;
+	int		fd;
+
+	fd = open("here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	size = ft_strlen(av[2]);
+	while (true)
+	{
+		line = get_next_line(0);
+		if (!ft_strncmp(line, av[2], size))
+		{
+			free(line);
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
 }
